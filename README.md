@@ -42,7 +42,7 @@ Aqui está o código completo para o projeto:
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <DHTesp.h>
-#include <ESP32Servo.h>  // Usando a biblioteca compatível com o ESP32
+#include <ESP32Servo.h>  
 
 const int DHT_PIN = 25; 
 DHTesp dht;
@@ -57,7 +57,7 @@ const char* mqtt_server = "test.mosquitto.org";
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-// Função para conectar ao WiFi
+
 void setup_wifi() {
   Serial.print("Conectando ao WiFi...");
   WiFi.mode(WIFI_STA);
@@ -70,7 +70,7 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
 }
 
-// Função de callback para mensagens MQTT
+
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Mensagem recebida em [");
   Serial.print(topic);
@@ -80,7 +80,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Se a mensagem recebida for para controlar o servo
+
   if (String(topic) == "ThinkIOT/comandos") {
     int angulo = atoi((char*)payload);  
     if (angulo >= 0 && angulo <= 180) {
@@ -91,7 +91,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-// Função para reconectar ao broker MQTT
 void reconnect() {
   while (!client.connected()) {
     String clientId = "ESP32Client-";
@@ -137,7 +136,7 @@ void loop() {
   Serial.print("Temperatura: "); Serial.println(temperatura);
   Serial.print("Umidade: "); Serial.println(umidade);
 
-  // Exemplo de controle automático do servo com base na temperatura
+
   int angulo = map(data.temperature, 0, 40, 0, 180);  
   meuServo.write(angulo);  
 
